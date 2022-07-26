@@ -1,6 +1,6 @@
-# Data Engineering Capstone Project
+# **Data Engineering Capstone Project**
 
-## Project Summary
+## **Project Summary**
 In this project, the key objective of this project is create an ETL pipline from  I94 Immigration
 is figre out how factors affect the number of tourists,some factors is :
 - the temperature
@@ -16,29 +16,29 @@ The project follows the follow steps:
 * Step 3: Define the Data Model
 * Step 4: Run ETL to Model the Data
 * Step 5: Complete Project Write Up
-## Scope the Project and Gather Data
-### Project Scope 
+## **Scope the Project and Gather Data**
+### **Project Scope**
 In this project, I will utilize the PySpark to perform an extract data , transform data and load ETL pipline.
 The ETL pipeline is base on the following steps:
     Collect data from Database --> Processing data --> Cleaning data --> Storing data to the Data warehourse.
 The output of ETL is Star Schema model to parquet files and it can be store in local system,AWS Redshift,Cloud Database or ..etc..
-The main tools is pandas,pyspark 
+The main tools is pandas,pyspark
 
-### Describe and Gather Data 
+### **Describe and Gather Data**
 The project is using the datasets:
  - Immigration Data:  A data dictionary is included in the workspace.This data comes from the U.S. National Tourism and Trade Office. More information on the immigration data [here](https://travel.trade.gov/research/reports/i94/historical/2016.html).
  - US Cities Demographic: The data of the demographic of all US cities and census-designated places with a population greater or equal to 65,000. Dataset comes from OpenSoft found [here](https://public.opendatasoft.com/explore/dataset/us-cities-demographics/export/)
  - Global Land Temperatures By City: the data of the temperatures of various cities in the world from  1743 to 2013. This dataset came from Kaggle found [here](https://www.kaggle.com/datasets/berkeleyearth/climate-change-earth-surface-temperature-data).
  - Airport Code Table: Airpot codes data contains information about different airports around the world. The data come from [here](https://datahub.io/core/airport-codes#data)
 
-### Define the Data Model
-#### Conceptual Data Model
+### **Define the Data Model**
+#### **Conceptual Data Model**
 I create a Star Schema for OLAP queries. The Schema for each table will following the bellow figure:
 ![Star Schema](./documents/i94_immagration.png "Star Schema")
-### 3.2 Mapping Out Data Pipelines
+### **Mapping Out Data Pipelines**
 -  Extract the I94_SAS_Labels_Descriptions
 - Extract the the I94_SAS_Labels_Description.SAS file to CSV files.
-The output files:
+**The output files**:
     - i94_country.csv
     - i94_model.csv
     - i94_port.csv
@@ -46,7 +46,7 @@ The output files:
     - i94_visa.csv
 - Data loading,transformation,cleanup and create spark data table frame
 
-    - fact_immagration
+    - **fact_immagration**
         - Load the immigration data from the base dataset.
         - Convert for arrival and departure data column.
         - Convert for i94visa and i94mode data column.
@@ -59,7 +59,7 @@ The output files:
         - Compute the age of each individual.
         - Insert the immigration fact data into a spark dataframes.
         - Saving the data in parquet format.
-    - dim_airports
+    - **dim_airports**
         - Load the csv directly into a spark dataframes.
         - Equivalent to the following pandas code.
         - Verify that the municipality field is available for all airports.
@@ -67,7 +67,7 @@ The output files:
         - Extract the state codes.
         - Convert the dataframes from pandas to spark.
         - Saving the data in parquet format in a spark dataframe.
-    - dim_demographics
+    - **dim_demographics**
         - Load the various csv files into pandas dataframes.
         - Convert the city to upper case and remove any leading and trailing spaces.
         - Remove any leading or trailing spaces and convert to upper case.
@@ -75,7 +75,7 @@ The output files:
         - Convert the dataframes from pandas to spark.
         - Insert data into the demographics dim table.
         - Saving the data in parquet format.
-    - dim_temperture
+    - **dim_temperture**
         - Load data base abd use pandas to load DataFame.
         - Keep only data for the United States.
         - Convert the date to datetime objects.
@@ -85,12 +85,12 @@ The output files:
         - Insert the temperature dim data into a spark dataframe.
         - Saving the data in parquet format.
 
-## Run Pipelines to Model the Data
+## **Run Pipelines to Model the Data**
 Before run the ETL pipline script, please install pip libraries following the ***requirements.txt***  file
 ```
 pip install -r requirements.txt
 ```
-### Create the data model
+### **Create the data model**
 Build the data pipelines to create the data model. Refer and run etl.py script to create the data pipelines.
 ```
 from etl import *
@@ -106,7 +106,7 @@ main_etl(spark)
 print("Finish the ETL process")
 ```
 
-### Data Quality Checks
+### **Data Quality Checks**
 Explain the data quality checks you'll perform to ensure the pipeline ran as expected. These could include:
  * Integrity constraints on the relational database (e.g., unique key, data type, etc.)
  * Unit tests for the scripts to ensure they are doing the right thing
@@ -123,7 +123,7 @@ print("----------------------------------------------------------------")
 main_check(spark)
 ```
 
-## Complete Project Write Up
+## **Complete Project Write Up**
 * The rationale for the choice of tools and technologies for the project:
     - Pandas for loading CSV data files then process,clean and analyse data
     - Spark for large datasets such as sas7bdat data. It's helpful for processing to extract,transform,load and store tables.
@@ -145,3 +145,6 @@ main_check(spark)
     * The database needed to be accessed by 100+ people:
         - In this case, the data should be migrated to the AWS Redshift to allow the auto-scaling capabilities.
         - Immigration the Elastic Load Balancing of AWS to improve the performance of the dashboard application.
+
+#  **How to run this project with **Docker****
+
