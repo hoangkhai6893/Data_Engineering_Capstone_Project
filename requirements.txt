@@ -1,0 +1,7 @@
+pandas
+boto3
+pyspark
+sqlalchemy 
+geopandas
+matplotlib
+configparser
