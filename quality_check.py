@@ -25,7 +25,7 @@ def create_Spark():
     return spark
 
 
-def check_NULL_Value(spark, input_table,):
+def check_NULL_Value(spark, input_table,table_name):
     """
     This function performs null value checks on specific columns of given tables received as parameters
     Parameters:
@@ -34,24 +34,37 @@ def check_NULL_Value(spark, input_table,):
     """
     print("Processing check null value for table")
     input_table.createOrReplaceTempView("check_null_table")
+    count_null = 0
     for column in input_table.columns:
         print(column)
         value_result = spark.sql(f"""
                         SELECT COUNT(*) as NULL_count 
                         FROM check_null_table
                         WHERE {column} IS NULL
-            """).show()
+            """)
+        if value_result.collect()[0][0] > 0 :
+            print(f"Column {column} is failed!, Found NULL value with count is : ", value_result.collect()[0][0])
+            count_null += 1
+        else:
+            print(f"Column {column} is passed. ")
+        
         print("--------------------------------------------------------------")
+    if count_null > 0:
+        print(f"Table {table_name} has data quality check NULL is failed!")
+    else:
+        print(f"Table {table_name} is passed")
 
 
-def check_dimension_table(spark, input_table):
+def check_dimension_table(spark, input_table,table_name):
     print("Check the dimension table")
     input_table.createOrReplaceTempView("check_dimension_table")
     value_result = spark.sql(f"""
                         SELECT COUNT(*) 
                         AS dimension_count 
                         FROM check_dimension_table
-            """).show()
+            """)
+    print(f"Check dimension table {table_name} successfully")
+    print(f"The dimension table {table_name} is:",value_result.collect()[0][0])
 
 
 def check_inner_join_fact_immigration_table(spark):
@@ -90,6 +103,7 @@ def check_inner_join_fact_immigration_table(spark):
         ON fi.city = da.municipality
         AND fi.state = da.state
         """).show(2)
+    print("Succesfully check inner join fact immigration_table with dim_airports tables")
     print("----------------------------------------------------------------")
     spark.sql("""
         SELECT COUNT(*)
@@ -106,7 +120,7 @@ def check_inner_join_fact_immigration_table(spark):
         ON fi.city = da.city
         AND fi.state = da.state_code
     """).show(2)
-
+    print("Succesfully check inner join fact immigration_table with dim_demographics tables")
     print("----------------------------------------------------------------")
 
 
@@ -119,9 +133,9 @@ def main_check(spark):
         print("----------------------------------------------------------------")
         print("Process for table", table)
         df_immigration_test = spark.read.parquet(RESULT_FOLDER + table)
-        check_NULL_Value(spark, df_immigration_test)
+        check_NULL_Value(spark, df_immigration_test,table)
         print("----------------------------------------------------------------")
-        check_dimension_table(spark, df_immigration_test)
+        check_dimension_table(spark, df_immigration_test,table)
         print("----------------------------------------------------------------")
     print("Done to check for null values ")
     print("----------------------------------------------------------------")
@@ -136,3 +150,4 @@ if __name__ == '__main__':
     print("Create the Spark Session...")
     spark = create_Spark()
     main_check(spark)
+
